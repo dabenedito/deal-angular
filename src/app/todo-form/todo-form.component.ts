@@ -1,35 +1,78 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validator, Validators} from "@angular/forms";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Todo } from "../todo/model/todo";
+import { TodoService } from "../services/todo.service";
+import { Observable, map, of } from "rxjs";
 
 @Component({
   selector: 'app-todo-form',
   templateUrl: './todo-form.component.html',
-  styleUrls: ['./todo-form.component.css']
+  styleUrls: [ './todo-form.component.css' ]
 })
-export class TodoFormComponent implements OnInit {
-  todoList: { description: string }[] = [];
+
+export class TodoFormComponent implements OnInit, OnDestroy {
+  todoList$: Observable<Todo[]> = of();
+  sub: any;
   todoForm = new FormGroup({
-    description: new FormControl('', [
+    descricao: new FormControl('', [
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(100),
     ])
   });
 
-  constructor() { }
+  constructor(private todoService: TodoService) { }
 
-  ngOnInit(): void {  }
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.obterDados();
+  }
+
+  private tratarErro(erro: any): void {
+    console.log('Ops... Não foi possível obter os dados. ', erro);
+  }
+
+  obterDados(): void {
+    this.todoList$ = this.todoService.obterDados()
+      .pipe(
+        map(res => res)
+      );
+  }
 
   salvar() {
-    if (this.todoForm.invalid) {
-      alert("Preencha o campo corretamente");
+    if(this.todoForm.invalid) {
+      alert('preencha o campo descricao corretamente');
       return;
     }
 
-    let newTodo = { description: this.todoForm.controls['description'].value };
-    this.todoList.push(newTodo);
+    let newTodo = {
+      descricao: this.todoForm.controls[ 'descricao' ].value,
+    };
+
+    this.todoService.salvar(newTodo).subscribe(
+      (resposta) => this.obterDados(),
+      (erro) => this.tratarErro(erro)
+    );
+
     this.todoForm.reset();
-    alert("Registro inserido com sucesso.")
+  }
+
+  removerTarefa(id: number): void {
+    this.todoService.removerTarefa(id).subscribe(
+      (resposta) => this.obterDados(),
+      (erro) => this.tratarErro(erro)
+    );
+  }
+
+  concluirTarefa(item: Todo): void {
+    item.concluido = !item.concluido;
+    this.todoService.concluirTarefa(item).subscribe(
+      (resposta) => this.obterDados(),
+      (erro) => this.tratarErro(erro)
+    );
   }
 
 }

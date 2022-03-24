@@ -1,3 +1,5 @@
 export interface Todo {
-  description: string;
+  id: number,
+  descricao: string,
+  concluido: boolean,
 }

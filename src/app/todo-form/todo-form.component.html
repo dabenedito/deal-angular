@@ -9,19 +9,19 @@
             <span>Descrição</span>
           </div>
           <div class="col-12 pb-3">
-            <input class="form-control" formControlName="description">
-            <span class="text-danger" *ngIf="todoForm.controls['description'].touched &&
-                                             todoForm.controls['description'].hasError('required')">
+            <input class="form-control" formControlName="descricao">
+            <span class="text-danger" *ngIf="todoForm.controls['descricao'].touched &&
+                                             todoForm.controls['descricao'].hasError('required')">
               Ops... este campo não pode ser nulo
             </span>
 
-            <span class="text-danger" *ngIf="todoForm.controls['description'].touched &&
-                                             todoForm.controls['description'].hasError('maxlength')">
+            <span class="text-danger" *ngIf="todoForm.controls['descricao'].touched &&
+                                             todoForm.controls['descricao'].hasError('maxlength')">
               Ops... Tamanho máximo deve ser de 100 caracteres
 
             </span>
-            <span class="text-danger" *ngIf="todoForm.controls['description'].touched &&
-                                             todoForm.controls['description'].hasError('minlength')">
+            <span class="text-danger" *ngIf="todoForm.controls['descricao'].touched &&
+                                             todoForm.controls['descricao'].hasError('minlength')">
               Ops... Tamanho minimo deve ser de 5 caracteres
             </span>
           </div>
@@ -39,11 +39,22 @@
     </div>
   </div>
 
-  <div class="row pt-3">
-    <ul>
-      <li *ngFor="let todo of todoList">
-        <span>item: </span>{{todo.description}}
-      </li>
-    </ul>
+  <div class="pt-3">
+    <div *ngFor="let todo of todoList$ | async" class="row">
+      <div class="p-3 mb-2 col-5 text-white" [ngClass]="!todo.concluido ? 'bg-danger' : 'bg-success'">
+        {{ todo.descricao }}
+      </div>
+
+      <div class="form-check form-switch col-1">
+        <input type="checkbox" class="form-check-input"
+               [checked]="todo.concluido"
+               (click)="concluirTarefa(todo)">
+      </div>
+
+      <div class="col-3">
+        <button type="button" class="btn btn-danger" (click)="removerTarefa(todo.id)">Apagar</button>
+      </div>
+    </div>
+
   </div>
 </div>

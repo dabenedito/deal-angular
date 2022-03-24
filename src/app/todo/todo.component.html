@@ -9,7 +9,7 @@
             <span>Descricao</span>
           </div>
           <div class="col-12 pb-3">
-            <input class="form-control" name="descricao" [(ngModel)]="model.description">
+            <input class="form-control" name="descricao" [(ngModel)]="model.descricao">
           </div>
           <div class="col-12">
             <button class="btn btn-primary" type="button" (click)="salvar()">Salvar</button>
@@ -22,7 +22,7 @@
   <div class="row pt-3">
     <ul>
       <li *ngFor="let todo of todoList">
-        <span>item: </span>{{todo.description}}
+        <span>item: </span>{{todo.descricao}}
       </li>
     </ul>
   </div>

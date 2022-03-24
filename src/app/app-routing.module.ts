@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {TodoComponent} from "./todo/todo.component";
-import {TodoFormComponent} from "./todo-form/todo-form.component";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { TodoComponent } from "./todo/todo.component";
+import { TodoFormComponent } from "./todo-form/todo-form.component";
 
 const routes: Routes = [
   {
@@ -12,12 +12,12 @@ const routes: Routes = [
     path: 'todo-form',
     component: TodoFormComponent
   }
-]
+];
 
 @NgModule({
   declarations: [],
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule {
 
